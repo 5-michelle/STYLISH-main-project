@@ -1,4 +1,4 @@
-const {pool} = require('./mysqlcon');
+const { pool } = require('./mysqlcon');
 
 const createProduct = async (product, variants, images) => {
     const conn = await pool.getConnection();
@@ -11,7 +11,7 @@ const createProduct = async (product, variants, images) => {
         return result.insertId;
     } catch (error) {
         await conn.query('ROLLBACK');
-        console.log(error)
+        console.log(error);
         return -1;
     } finally {
         await conn.release();
@@ -19,7 +19,7 @@ const createProduct = async (product, variants, images) => {
 };
 
 const getProducts = async (pageSize, paging = 0, requirement = {}) => {
-    const condition = {sql: '', binding: []};
+    const condition = { sql: '', binding: [] };
     if (requirement.category) {
         condition.sql = 'WHERE category = ?';
         condition.binding = [requirement.category];
@@ -33,7 +33,7 @@ const getProducts = async (pageSize, paging = 0, requirement = {}) => {
 
     const limit = {
         sql: 'LIMIT ?, ?',
-        binding: [pageSize * paging, pageSize]
+        binding: [pageSize * paging, pageSize],
     };
 
     const productQuery = 'SELECT * FROM product ' + condition.sql + ' ORDER BY id ' + limit.sql;
@@ -46,8 +46,8 @@ const getProducts = async (pageSize, paging = 0, requirement = {}) => {
     const [productCounts] = await pool.query(productCountQuery, productCountBindings);
 
     return {
-        'products': products,
-        'productCount': productCounts[0].count
+        products: products,
+        productCount: productCounts[0].count,
     };
 };
 
