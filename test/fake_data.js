@@ -7,8 +7,8 @@ const users = [
         name: 'test1',
         picture: null,
         access_token: 'test1accesstoken',
-        access_expired: (60*60), // 1hr by second
-        login_at: new Date('2020-01-01')
+        access_expired: 60 * 60, // 1hr by second
+        login_at: new Date('2020-01-01'),
     },
     {
         provider: 'facebook',
@@ -18,8 +18,8 @@ const users = [
         name: 'test2',
         picture: 'https://graph.facebook.com/1/picture?type=large',
         access_token: 'test2accesstoken',
-        access_expired: (60*60), // 1hr by second
-        login_at: new Date('2020-01-01')
+        access_expired: 60 * 60, // 1hr by second
+        login_at: new Date('2020-01-01'),
     },
     {
         provider: 'native',
@@ -30,19 +30,19 @@ const users = [
         picture: null,
         access_token: 'test3accesstoken',
         access_expired: 0,
-        login_at: new Date('2020-01-01')
+        login_at: new Date('2020-01-01'),
     },
 ];
 
 const roles = [
     {
         id: 1,
-        name: 'admin'
+        name: 'admin',
     },
     {
         id: 2,
-        name: 'user'
-    }
+        name: 'user',
+    },
 ];
 
 const products = [
@@ -233,227 +233,227 @@ const products = [
 const product_images = [
     {
         product_id: 1,
-        image: '0.jpg'
+        image: '0.jpg',
     },
     {
         product_id: 1,
-        image: '1.jpg'
+        image: '1.jpg',
     },
     {
         product_id: 1,
-        image: '0.jpg'
+        image: '0.jpg',
     },
     {
         product_id: 1,
-        image: '1.jpg'
+        image: '1.jpg',
     },
     {
         product_id: 2,
-        image: '0.jpg'
+        image: '0.jpg',
     },
     {
         product_id: 2,
-        image: '1.jpg'
+        image: '1.jpg',
     },
     {
         product_id: 2,
-        image: '0.jpg'
+        image: '0.jpg',
     },
     {
         product_id: 2,
-        image: '1.jpg'
+        image: '1.jpg',
     },
     {
         product_id: 3,
-        image: '0.jpg'
+        image: '0.jpg',
     },
     {
         product_id: 3,
-        image: '1.jpg'
+        image: '1.jpg',
     },
     {
         product_id: 3,
-        image: '0.jpg'
+        image: '0.jpg',
     },
     {
         product_id: 3,
-        image: '1.jpg'
+        image: '1.jpg',
     },
     {
         product_id: 4,
-        image: '0.jpg'
+        image: '0.jpg',
     },
     {
         product_id: 4,
-        image: '1.jpg'
+        image: '1.jpg',
     },
     {
         product_id: 4,
-        image: '0.jpg'
+        image: '0.jpg',
     },
     {
         product_id: 4,
-        image: '1.jpg'
+        image: '1.jpg',
     },
     {
         product_id: 5,
-        image: '0.jpg'
+        image: '0.jpg',
     },
     {
         product_id: 5,
-        image: '1.jpg'
+        image: '1.jpg',
     },
     {
         product_id: 5,
-        image: '0.jpg'
+        image: '0.jpg',
     },
     {
         product_id: 5,
-        image: '1.jpg'
+        image: '1.jpg',
     },
     {
         product_id: 6,
-        image: '0.jpg'
+        image: '0.jpg',
     },
     {
         product_id: 6,
-        image: '1.jpg'
+        image: '1.jpg',
     },
     {
         product_id: 6,
-        image: '0.jpg'
+        image: '0.jpg',
     },
     {
         product_id: 6,
-        image: '1.jpg'
+        image: '1.jpg',
     },
     {
         product_id: 7,
-        image: '0.jpg'
+        image: '0.jpg',
     },
     {
         product_id: 7,
-        image: '1.jpg'
+        image: '1.jpg',
     },
     {
         product_id: 7,
-        image: '0.jpg'
+        image: '0.jpg',
     },
     {
         product_id: 7,
-        image: '1.jpg'
+        image: '1.jpg',
     },
     {
         product_id: 8,
-        image: '0.jpg'
+        image: '0.jpg',
     },
     {
         product_id: 8,
-        image: '1.jpg'
+        image: '1.jpg',
     },
     {
         product_id: 8,
-        image: '0.jpg'
+        image: '0.jpg',
     },
     {
         product_id: 8,
-        image: '1.jpg'
+        image: '1.jpg',
     },
     {
         product_id: 9,
-        image: '0.jpg'
+        image: '0.jpg',
     },
     {
         product_id: 9,
-        image: '1.jpg'
+        image: '1.jpg',
     },
     {
         product_id: 9,
-        image: '0.jpg'
+        image: '0.jpg',
     },
     {
         product_id: 9,
-        image: '1.jpg'
+        image: '1.jpg',
     },
     {
         product_id: 10,
-        image: '0.jpg'
+        image: '0.jpg',
     },
     {
         product_id: 10,
-        image: '1.jpg'
+        image: '1.jpg',
     },
     {
         product_id: 10,
-        image: '0.jpg'
+        image: '0.jpg',
     },
     {
         product_id: 10,
-        image: '1.jpg'
+        image: '1.jpg',
     },
     {
         product_id: 11,
-        image: '0.jpg'
+        image: '0.jpg',
     },
     {
         product_id: 11,
-        image: '1.jpg'
+        image: '1.jpg',
     },
     {
         product_id: 11,
-        image: '0.jpg'
+        image: '0.jpg',
     },
     {
         product_id: 11,
-        image: '1.jpg'
+        image: '1.jpg',
     },
     {
         product_id: 12,
-        image: '0.jpg'
+        image: '0.jpg',
     },
     {
         product_id: 12,
-        image: '1.jpg'
+        image: '1.jpg',
     },
     {
         product_id: 12,
-        image: '0.jpg'
+        image: '0.jpg',
     },
     {
         product_id: 12,
-        image: '1.jpg'
+        image: '1.jpg',
     },
     {
         product_id: 13,
-        image: '0.jpg'
+        image: '0.jpg',
     },
     {
         product_id: 13,
-        image: '1.jpg'
+        image: '1.jpg',
     },
     {
         product_id: 13,
-        image: '0.jpg'
+        image: '0.jpg',
     },
     {
         product_id: 13,
-        image: '1.jpg'
+        image: '1.jpg',
     },
     {
         product_id: 14,
-        image: '0.jpg'
+        image: '0.jpg',
     },
     {
         product_id: 14,
-        image: '1.jpg'
+        image: '1.jpg',
     },
     {
         product_id: 14,
-        image: '0.jpg'
+        image: '0.jpg',
     },
     {
         product_id: 14,
-        image: '1.jpg'
+        image: '1.jpg',
     },
 ];
 
@@ -467,8 +467,8 @@ const colors = [
         id: 2,
         color_name: '亮綠',
         color_code: 'DDFFBB',
-    }
-]
+    },
+];
 
 const variants = [
     {
@@ -505,33 +505,33 @@ const variants = [
 
 const hots = [
     {
-        title: 'hot1'
+        title: 'hot1',
     },
     {
-        title: 'hot2'
-    }
+        title: 'hot2',
+    },
 ];
 
 const hot_products = [
     {
         hot_id: 1,
-        product_id: 1
+        product_id: 1,
     },
     {
         hot_id: 1,
-        product_id: 2
+        product_id: 2,
     },
     {
         hot_id: 1,
-        product_id: 3
+        product_id: 3,
     },
     {
         hot_id: 2,
-        product_id: 1
+        product_id: 1,
     },
     {
         hot_id: 2,
-        product_id: 4
+        product_id: 4,
     },
 ];
 
@@ -539,18 +539,18 @@ const campaigns = [
     {
         product_id: 1,
         picture: 'keyvisual.jpg',
-        story: '測試1'
+        story: '測試1',
     },
     {
         product_id: 2,
         picture: 'keyvisual.jpg',
-        story: '測試2'
+        story: '測試2',
     },
     {
         product_id: 3,
         picture: 'keyvisual.jpg',
-        story: '測試3'
-    }
+        story: '測試3',
+    },
 ];
 
 module.exports = {

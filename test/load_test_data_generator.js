@@ -1,22 +1,15 @@
 /* eslint-disable no-unused-vars */
 require('dotenv').config();
-const {pool} = require('../server/models/mysqlcon');
-const {getTotalOrders} = require('./load_test_data');
+const { pool } = require('../server/models/mysqlcon');
+const { getTotalOrders } = require('./load_test_data');
 const totalOrders = getTotalOrders();
-const {Generator, beta_trans} = require('./random_number_generator');
+const { Generator, beta_trans } = require('./random_number_generator');
 const user_id_generator = new Generator(5, beta_trans);
 
 async function createFakeOrder(orders) {
-    return await pool.query('INSERT INTO order_table (user_id, number, time, status, details, total) VALUES ?',
-        [orders.map((x, i) => ([
-            1 + user_id_generator.generate(),
-            i,
-            Date.now(),
-            0,
-            JSON.stringify(x),
-            x.total,
-        ]))]
-    );
+    return await pool.query('INSERT INTO order_table (user_id, number, time, status, details, total) VALUES ?', [
+        orders.map((x, i) => [1 + user_id_generator.generate(), i, Date.now(), 0, JSON.stringify(x), x.total]),
+    ]);
 }
 
 async function createFakeData() {
@@ -24,8 +17,8 @@ async function createFakeData() {
     while (i < totalOrders.length) {
         let j = 0;
         let orders = [];
-        while (j < Math.min(10000, totalOrders.length)){
-            orders.push(totalOrders[i+j]);
+        while (j < Math.min(10000, totalOrders.length)) {
+            orders.push(totalOrders[i + j]);
             j += 1;
         }
         i += j;

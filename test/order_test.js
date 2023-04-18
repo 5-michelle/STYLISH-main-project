@@ -1,7 +1,7 @@
 const _ = require('lodash');
-const {expect, requester} = require('./set_up');
-const {users} = require('./fake_data');
-const {pool} = require('../server/models/mysqlcon');
+const { expect, requester } = require('./set_up');
+const { users } = require('./fake_data');
+const { pool } = require('../server/models/mysqlcon');
 const sinon = require('sinon');
 let stub;
 
@@ -9,7 +9,7 @@ const user1 = users[0];
 const user = {
     provider: user1.provider,
     email: user1.email,
-    password: user1.password
+    password: user1.password,
 };
 let accessToken;
 let userId;
@@ -26,22 +26,24 @@ const orderData = {
             phone: '0912345678',
             email: 'test@gmail.com',
             address: 'testaddress',
-            time: 'anytime'
+            time: 'anytime',
         },
-        list:  [{
-            id: 1,
-            qty: 1,
-            name: '前開衩扭結洋裝',
-            size: 'S',
-            color: {code: 'FFFFFF', name: '白色'},
-            price: 1000,
-            stock: 2,
-            main_image: 'https://test/1/main.jpg'
-        }],
+        list: [
+            {
+                id: 1,
+                qty: 1,
+                name: '前開衩扭結洋裝',
+                size: 'S',
+                color: { code: 'FFFFFF', name: '白色' },
+                price: 1000,
+                stock: 2,
+                main_image: 'https://test/1/main.jpg',
+            },
+        ],
         subtotal: 1000,
         freight: 60,
-        total: 1060
-    }
+        total: 1060,
+    },
 };
 
 const fakeTappayResponse = {
@@ -64,25 +66,22 @@ const fakeTappayResponse = {
         bin_code: '424242',
         issuer_zh_tw: '',
         bank_id: '',
-        country_code: 'GB'
+        country_code: 'GB',
     },
     transaction_time_millis: 1581325720207,
     bank_transaction_time: {
         start_time_millis: '1581325720251',
-        end_time_millis: '1581325720251'
+        end_time_millis: '1581325720251',
     },
     bank_result_code: '',
     bank_result_msg: '',
     card_identifier: 'dee921560b074be7a860a6b44a80c21b',
-    merchant_id: 'AppWorksSchool_CTBC'
+    merchant_id: 'AppWorksSchool_CTBC',
 };
 
 describe('order', () => {
-
     before(async () => {
-        const res = await requester
-            .post('/api/1.0/user/signin')
-            .send(user);
+        const res = await requester.post('/api/1.0/user/signin').send(user);
         const data = res.body.data;
         userId = data.user.id;
         accessToken = data.access_token;
@@ -93,7 +92,7 @@ describe('order', () => {
                 if (prime === VALID_PRIME) {
                     resolve(fakeTappayResponse);
                 } else if (prime === INVALID_PRIME) {
-                    resolve({status: 500});
+                    resolve({ status: 500 });
                 }
             });
         };
@@ -101,10 +100,7 @@ describe('order', () => {
     });
 
     it('checkout order with invalid data', async () => {
-        const res = await requester
-            .post('/api/1.0/order/checkout')
-            .set('Authorization', `Bearer ${accessToken}`)
-            .send({});
+        const res = await requester.post('/api/1.0/order/checkout').set('Authorization', `Bearer ${accessToken}`).send({});
 
         expect(res.statusCode).to.equal(400);
         expect(res.body.error).to.equal('Create Order Error: Wrong Data Format');
@@ -113,20 +109,14 @@ describe('order', () => {
     it('checkout order with invalid prime', async () => {
         const invalidOrderData = _.cloneDeep(orderData);
         invalidOrderData.prime = INVALID_PRIME;
-        const res = await requester
-            .post('/api/1.0/order/checkout')
-            .set('Authorization', `Bearer ${accessToken}`)
-            .send(invalidOrderData);
+        const res = await requester.post('/api/1.0/order/checkout').set('Authorization', `Bearer ${accessToken}`).send(invalidOrderData);
 
         expect(res.statusCode).to.equal(400);
         expect(res.body.error).to.equal('Invalid prime');
     });
 
     it('checkout order with valid data and user', async () => {
-        const res = await requester
-            .post('/api/1.0/order/checkout')
-            .set('Authorization', `Bearer ${accessToken}`)
-            .send(orderData);
+        const res = await requester.post('/api/1.0/order/checkout').set('Authorization', `Bearer ${accessToken}`).send(orderData);
 
         const orderNumber = res.body.data.number;
         const insertedOrders = await pool.query('SELECT * FROM order_table WHERE number = ?', [orderNumber]);
@@ -145,9 +135,7 @@ describe('order', () => {
     });
 
     it('checkout order without login', async () => {
-        const res = await requester
-            .post('/api/1.0/order/checkout')
-            .send(orderData);
+        const res = await requester.post('/api/1.0/order/checkout').send(orderData);
 
         expect(res.statusCode).to.equal(401);
     });
