@@ -26,6 +26,7 @@
     },
     "homepage": "https://github.com/cwpeng/stylish-backend#readme",
     "dependencies": {
+        "@line/bot-sdk": "^7.5.2",
         "assert": "^2.0.0",
         "bcrypt": "^5.0.1",
         "chai": "^4.2.0",
@@ -48,7 +49,8 @@
         "nodemon": "^2.0.4",
         "redis": "^4.0.4",
         "sinon": "^8.1.1",
-        "validator": "^13.0.0"
+        "validator": "^13.0.0",
+        "xlsx": "^0.18.5"
     },
     "devDependencies": {
         "eslint": "^8.5.0",
