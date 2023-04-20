@@ -11,7 +11,7 @@ const STYLISH_imageURL =
     'https://images.unsplash.com/photo-1585914924626-15adac1e6402?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=871&q=80';
 const client = new line.Client(config);
 const richMenuButtonTexts = ['顯示熱門商品', '男裝推薦', '女裝推薦', '配件推薦', '聯絡商家', '前往官網'];
-const websiteURL = 'http://54.64.217.57';
+const websiteURL = process.env.PUBLIC_URL;
 
 setUpDefaultRichMenu();
 
@@ -38,6 +38,7 @@ async function handleMessageEvent(event) {
             mainImageUrl = checkAndMakeImageUrl(hotProduct.main_image);
             buttonUrl = makeImageButtonUrlById(hotProduct.id);
             customReplyMessage = customReplyMessage = [
+                { type: 'text', text: '推薦你一個熱門商品' },
                 { type: 'text', text: `product ID${hotProduct.id}` },
                 {
                     type: 'template',
@@ -345,22 +346,28 @@ function setUpDefaultRichMenu() {
  * @returns
  */
 async function getSingleProductInfo(category) {
-    const product = await getProducts(1, 0, { category: `${category}` }).then((result) => {
-        console.log(result);
-        return result.products[0];
+    const product = await getProducts(1000, 0, { category: `${category}` }).then((result) => {
+        // console.log('result.length: ', result.products.length);
+
+        // return result.products[0];
+        const randomIndex = Math.floor(Math.random() * result.products.length);
+        console.log('🚀 ~ file: linebot_controller.js:354 ~ product ~ randomIndex:', randomIndex);
+        console.log(result.products[randomIndex]);
+        return result.products[randomIndex];
     });
     console.log(`product: ${product}`);
     return product;
 }
 
 /**
- * * 取得單一熱門商品資訊(用於reply message)
+ * * 取得單一熱門商品資訊(隨機)(用於reply message)
  * @returns{hotProduct}
  */
 async function getSingleHotProduct() {
     const hotProduct = await getHotProducts(1).then((result) => {
-        console.log(result[0]);
-        return result[0];
+        const randomIndex = Math.floor(Math.random() * result.length);
+        console.log(result[randomIndex]);
+        return result[randomIndex];
     });
     console.log(`hotProduct: ${hotProduct}`);
     return hotProduct;
