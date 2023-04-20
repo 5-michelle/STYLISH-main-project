@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stylish Product Management</title>
+<style>
+body{
+	font-size:16px;
+	font-family:"Noto Sans TC", "微軟正黑體", "新細明體", arial, sans-serif;
+	color:#3f3a3a;line-height:2.5em;
+}
+
+textarea{
+	width:400px;height:100px;padding:5px;
+}
+input{
+	width:300px;padding:5px;
+}
+</style>
+</head>
+<body>
+	<h3>Create a New Product by Excel</h3>
+	<form action="/api/1.0/admin/product_excel" method="post" enctype="multipart/form-data">
+		<label for="excel_file">Select an Excel file:</label>
+		<input type="file" id="excel_file" name="excel_file" accept=".xlsx,.xls">
+		<br><br>
+		<input type="submit" value="Upload">
+	  </form>
+</body>
+</html>
