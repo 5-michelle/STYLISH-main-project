@@ -123,6 +123,9 @@
 .product__image {
   width: 100%;
   vertical-align: middle;
+  width: 360px;
+  /* height: auto; */
+  height: 480px;
 }
 
 .product__colors {

@@ -1,4 +1,4 @@
-const {pool} = require('./mysqlcon');
+const { pool } = require('./mysqlcon');
 const got = require('got');
 
 const createOrder = async (order) => {
@@ -6,7 +6,7 @@ const createOrder = async (order) => {
     return result.insertId;
 };
 
-const createPayment = async function(orderId, payment){
+const createPayment = async function (orderId, payment) {
     const conn = await pool.getConnection();
     try {
         await conn.query('START TRANSACTION');
@@ -16,32 +16,32 @@ const createPayment = async function(orderId, payment){
         return true;
     } catch (error) {
         await conn.query('ROLLBACK');
-        return {error};
+        return { error };
     } finally {
         conn.release();
     }
 };
 
-const payOrderByPrime = async function(tappayKey, tappayId, prime, order){
+const payOrderByPrime = async function (tappayKey, tappayId, prime, order) {
     let res = await got.post('https://sandbox.tappaysdk.com/tpc/payment/pay-by-prime', {
         headers: {
-            'Content-Type':'application/json',
-            'x-api-key': tappayKey
+            'Content-Type': 'application/json',
+            'x-api-key': tappayKey,
         },
         json: {
-            'prime': prime,
-            'partner_key': tappayKey,
-            'merchant_id': tappayId,
-            'details': 'Stylish Payment',
-            'amount': order.total,
-            'cardholder': {
-                'phone_number': order.recipient.phone,
-                'name': order.recipient.name,
-                'email': order.recipient.email
+            prime: prime,
+            partner_key: tappayKey,
+            merchant_id: tappayId,
+            details: 'Stylish Payment',
+            amount: order.total,
+            cardholder: {
+                phone_number: order.recipient.phone,
+                name: order.recipient.name,
+                email: order.recipient.email,
             },
-            'remember': false
+            remember: false,
         },
-        responseType: 'json'
+        responseType: 'json',
     });
     return res.body;
 };

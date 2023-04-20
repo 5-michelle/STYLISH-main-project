@@ -9,9 +9,9 @@ const createHot = async (title, productIds) => {
     const conn = await pool.getConnection();
     try {
         await conn.query('START TRANSACTION');
-        const [hot] = await conn.query('INSERT INTO hot SET ?', {title});
+        const [hot] = await conn.query('INSERT INTO hot SET ?', { title });
         const hotId = hot.insertId;
-        const hotProductMapping = productIds.map(productId => [hotId, productId]);
+        const hotProductMapping = productIds.map((productId) => [hotId, productId]);
         await conn.query('INSERT INTO hot_product(hot_id, product_id) VALUES ?', [hotProductMapping]);
         await conn.query('COMMIT');
         return true;
@@ -37,5 +37,5 @@ module.exports = {
     createCampaign,
     createHot,
     getCampaigns,
-    getHots
+    getHots,
 };
