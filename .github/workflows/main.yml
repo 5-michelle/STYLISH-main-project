@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - develop
-      - victor_devlop
+      - victor_develop
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
