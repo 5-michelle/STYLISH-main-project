@@ -18,14 +18,7 @@ const createProduct = async (req, res) => {
         note: body.note,
         story: body.story,
     };
-
     product.main_image = req.files.main_image[0].filename;
-    // if (req.body.main_image) {
-    //     product.main_image = req.body.main_image;
-    // } else {
-    //     product.main_image = req.files.main_image[0].filename;
-    // }
-
     const colorIds = body.color_ids.split(',');
     const sizes = body.sizes.split(',');
 
@@ -34,16 +27,7 @@ const createProduct = async (req, res) => {
             return [product.id, color_id, size, Math.round(Math.random() * 10)];
         });
     });
-
     const images = req.files.other_images.map((img) => [product.id, img.filename]);
-    // let images = [];
-    // if (req.body.other_images) {
-    //     const urls = req.body.image_url.split(',');
-    //     images = urls.map((url) => [product.id, url]);
-    // } else {
-    //     images = req.files.other_images.map((img) => [product.id, img.filename]);
-    // }
-
     console.log(product);
     console.log(variants);
     console.log(images);
