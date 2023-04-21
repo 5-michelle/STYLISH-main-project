@@ -21,8 +21,8 @@ jobs:
             export PATH=$PATH:/usr/local/bin:/usr/bin
             cd STYLISH-main-project
             git --version
-            git pull
             git restore .
+            git pull
             git checkout develop
             npm install
             sudo env PATH=$PATH pm2 kill
