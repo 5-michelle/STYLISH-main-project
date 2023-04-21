@@ -1,4 +1,5 @@
 const ManagerDashboard = () => {
+    const websiteURLHttp = '3.115.74.105';
     const [messages, setMessages] = React.useState({});
     const [selectedUser, setSelectedUser] = React.useState(null);
     const [reply, setReply] = React.useState('');
@@ -7,7 +8,8 @@ const ManagerDashboard = () => {
     const fileInputRef = React.useRef();
 
     React.useEffect(() => {
-        socket.current = new WebSocket('ws://localhost:4000/manager');
+        // socket.current = new WebSocket('ws://localhost:4000/manager');
+        socket.current = new WebSocket(`ws://${websiteURLHttp}/manager`);
 
         socket.current.onmessage = (event) => {
             const newMessage = JSON.parse(event.data);
@@ -55,7 +57,18 @@ const ManagerDashboard = () => {
                 const formData = new FormData();
                 formData.append('file', new File([imageFile], imageFile.name));
 
-                fetch('http://localhost:4000/upload', {
+                // fetch('http://localhost:4000/upload', {
+                //     method: 'POST',
+                //     body: formData,
+                // })
+                //     .then((response) => response.json())
+                //     .then((data) => {
+                //         replyMessage.imageURL = data.filePath;
+                //     })
+                //     .catch((error) => {
+                //         console.error('Error uploading file:', error);
+                //     });
+                fetch(`http://${websiteURLHttp}/upload`, {
                     method: 'POST',
                     body: formData,
                 })

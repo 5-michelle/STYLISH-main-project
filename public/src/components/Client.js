@@ -1,4 +1,6 @@
 const Client = () => {
+    const websiteURLHttps = 'localhost:4000';
+    const websiteURLHttp = '3.115.74.105';
     const [userName, setUserName] = React.useState('');
     const [isLoggedIn, setIsLoggedIn] = React.useState(false);
     const [message, setMessage] = React.useState('');
@@ -51,7 +53,7 @@ const Client = () => {
                 const formData = new FormData();
                 formData.append('file', new File([imageFile], imageFile.name));
 
-                fetch('http://localhost:4000/upload', {
+                fetch(`https://${websiteURLHttp}/upload`, {
                     method: 'POST',
                     body: formData,
                 })
@@ -75,11 +77,12 @@ const Client = () => {
         if (isLoggedIn) {
             const checkConnection = async () => {
                 try {
-                    const response = await fetch('http://localhost:4000/api/check_connection');
+                    const response = await fetch(`https://${websiteURLHttp}/api/check_connection`);
                     const data = await response.json();
 
                     if (data.canConnect) {
-                        const newSocket = new WebSocket(`ws://localhost:4000`);
+                        // const newSocket = new WebSocket(`ws://localhost:4000`);
+                        const newSocket = new WebSocket(`ws://${websiteURLHttp}`);
 
                         newSocket.addEventListener('message', (event) => {
                             const serverMessage = JSON.parse(event.data);
