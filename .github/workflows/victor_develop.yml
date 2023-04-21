@@ -3,7 +3,6 @@ name: coworkD-stylish-build
 on:
   push:
     branches:
-      - develop
       - victor_develop
 jobs:
   build-and-push:
@@ -23,7 +22,8 @@ jobs:
             cd STYLISH-main-project
             git --version
             git pull
-            git checkout develop
+            git restore .
+            git checkout victor_develop
             npm install
             sudo env PATH=$PATH pm2 kill
             sudo env PATH=$PATH pm2 start index.js -n coworkD-STYLISH
