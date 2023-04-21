@@ -23,4 +23,6 @@ router.route('/admin/product_excel').post(/*authentication(USER_ROLE.ADMIN),*/ c
 router.route('/admin/campaign').post(authentication(USER_ROLE.ADMIN), cpUpload, wrapAsync(createCampaign));
 
 router.route('/admin/hot').post(authentication(USER_ROLE.ADMIN), wrapAsync(createHot));
+
+// router.route('/admin/manager');
 module.exports = router;

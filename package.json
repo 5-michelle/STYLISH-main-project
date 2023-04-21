@@ -1,4 +1,3 @@
-
 {
     "name": "stylish-backend",
     "version": "1.0.0",
@@ -51,6 +50,7 @@
         "redis": "^4.0.4",
         "sinon": "^8.1.1",
         "validator": "^13.0.0",
+        "ws": "^8.13.0",
         "xlsx": "^0.18.5"
     },
     "devDependencies": {
@@ -60,4 +60,3 @@
         "prettier": "^2.5.1"
     }
 }
-

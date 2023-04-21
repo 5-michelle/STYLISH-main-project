@@ -64,6 +64,7 @@ function App() {
             <Header cartItems={cart} />
             <Profile />
             <Footer />
+            <Client />
         </React.Fragment>
     );
 }

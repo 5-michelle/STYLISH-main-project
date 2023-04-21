@@ -25,6 +25,7 @@ function App() {
             <Header cartItems={cart} />
             <Thankyou />
             <Footer />
+            <Client />
         </React.Fragment>
     );
 }
