@@ -4,6 +4,7 @@ const { upload } = require('../../util/util');
 const cpUpload = upload.fields([
     { name: 'main_image', maxCount: 1 },
     { name: 'other_images', maxCount: 3 },
+
     { name: 'excel_file', maxCount: 1 },
 ]);
 
@@ -22,5 +23,4 @@ router.route('/admin/product_excel').post(/*authentication(USER_ROLE.ADMIN),*/ c
 router.route('/admin/campaign').post(authentication(USER_ROLE.ADMIN), cpUpload, wrapAsync(createCampaign));
 
 router.route('/admin/hot').post(authentication(USER_ROLE.ADMIN), wrapAsync(createHot));
-
 module.exports = router;

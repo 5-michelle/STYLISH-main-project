@@ -14,6 +14,9 @@ app.set('trust proxy', true);
 // app.set('trust proxy', 'loopback');
 app.set('json spaces', 2);
 
+//! line bot route(this should put before the express.urlencoded)
+app.use(require('./server/routes/linebot_route'));
+
 app.use(express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

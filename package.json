@@ -1,3 +1,4 @@
+
 {
     "name": "stylish-backend",
     "version": "1.0.0",
@@ -26,6 +27,7 @@
     },
     "homepage": "https://github.com/cwpeng/stylish-backend#readme",
     "dependencies": {
+        "@line/bot-sdk": "^7.5.2",
         "assert": "^2.0.0",
         "bcrypt": "^5.0.1",
         "chai": "^4.2.0",
@@ -58,3 +60,4 @@
         "prettier": "^2.5.1"
     }
 }
+

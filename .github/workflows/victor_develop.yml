@@ -1,0 +1,30 @@
+name: coworkD-stylish-build
+
+on:
+  push:
+    branches:
+      - victor_develop
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: SSH into EC2 instance
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOSTNAME }}
+          username: ${{ secrets.USER_NAME }}
+          key: ${{ secrets.AWS_PRIVATE_KEY }}
+          script: |
+            export PATH=$PATH:/usr/local/bin:/usr/bin
+            cd STYLISH-main-project
+            git --version
+            git restore .
+            git pull
+            git checkout victor_develop
+            npm install
+            sudo env PATH=$PATH pm2 kill
+            sudo env PATH=$PATH pm2 start index.js -n coworkD-STYLISH
+            git log
