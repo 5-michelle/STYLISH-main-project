@@ -111,6 +111,7 @@ function App() {
             <Carousel />
             <Products />
             <Footer />
+            <Client />
         </React.Fragment>
     );
 }

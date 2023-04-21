@@ -298,6 +298,7 @@ function App() {
             <Header cartItems={cartItems} />
             <Cart cartItems={cartItems} setCartItems={setCartItems} />
             <Footer />
+            <Client />
         </React.Fragment>
     );
 }

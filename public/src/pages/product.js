@@ -156,6 +156,7 @@ function App() {
             <Header cartItems={cartItems} />
             <Product cartItems={cartItems} setCartItems={setCartItems} />
             <Footer />
+            <Client />
         </React.Fragment>
     );
 }
