@@ -1,6 +1,7 @@
 const api = {
   // hostname: 'https://api.appworks-school.tw/api/1.0',
-  hostname: 'http://localhost:3000/api/1.0',
+  // hostname: 'http://localhost:3000/api/1.0',
+  hostname: 'https://appworks.csypt.me/api/1.0',
   getProducts(category, paging) {
     return fetch(`${this.hostname}/products/${category}?paging=${paging}`).then(
       (response) => response.json()
@@ -11,7 +12,7 @@ const api = {
       response.json()
     );
   },
-  searchProducts(keyword, paging) {
+  searchProducts(keyword, paging) { 
     return fetch(
       `${this.hostname}/products/search?keyword=${keyword}&paging=${paging}`
     ).then((response) => response.json());

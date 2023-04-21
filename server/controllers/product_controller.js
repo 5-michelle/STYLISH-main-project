@@ -18,13 +18,13 @@ const createProduct = async (req, res) => {
         note: body.note,
         story: body.story,
     };
-    // product.main_image = req.files.main_image[0].filename;
-    // if (req.body.main_image.startsWith('http')) {
-    if (req.body.main_image) {
-        product.main_image = req.body.main_image;
-    } else {
-        product.main_image = req.files.main_image[0].filename;
-    }
+
+    product.main_image = req.files.main_image[0].filename;
+    // if (req.body.main_image) {
+    //     product.main_image = req.body.main_image;
+    // } else {
+    //     product.main_image = req.files.main_image[0].filename;
+    // }
 
     const colorIds = body.color_ids.split(',');
     const sizes = body.sizes.split(',');
@@ -34,14 +34,15 @@ const createProduct = async (req, res) => {
             return [product.id, color_id, size, Math.round(Math.random() * 10)];
         });
     });
-    // const images = req.files.other_images.map((img) => [product.id, img.filename]);
-    let images = [];
-    if (req.body.other_images) {
-        const urls = req.body.image_url.split(',');
-        images = urls.map((url) => [product.id, url]);
-    } else {
-        images = req.files.other_images.map((img) => [product.id, img.filename]);
-    }
+
+    const images = req.files.other_images.map((img) => [product.id, img.filename]);
+    // let images = [];
+    // if (req.body.other_images) {
+    //     const urls = req.body.image_url.split(',');
+    //     images = urls.map((url) => [product.id, url]);
+    // } else {
+    //     images = req.files.other_images.map((img) => [product.id, img.filename]);
+    // }
 
     console.log(product);
     console.log(variants);
@@ -54,50 +55,91 @@ const createProduct = async (req, res) => {
     }
 };
 
+// Add function for uploading excel
 const createProductExcel = async (req, res) => {
-    const filePath = req.files.excel_file[0].path;
-    const file = reader.readFile(filePath);
-    const sheets = file.SheetNames;
-    let data = [];
+    try {
+        const filePath = req.files.excel_file[0].path;
+        const file = reader.readFile(filePath);
+        const sheets = file.SheetNames;
+        let data = [];
 
-    for (let i = 0; i < sheets.length; i++) {
-        const temp = reader.utils.sheet_to_json(file.Sheets[file.SheetNames[i]]);
-        temp.forEach((res) => {
-            data.push(res);
-        });
-    }
-
-    for (const item of data) {
-        const product = {
-            id: item.product_id,
-            category: item.category,
-            title: item.title,
-            description: item.description,
-            price: item.price,
-            texture: item.texture,
-            wash: item.wash,
-            place: item.place,
-            note: item.note,
-            story: item.story,
-        };
-        product.main_image = item.main_image;
-        const colorIds = item.color_ids.split(',');
-        const sizes = item.sizes.split(',');
-        const variants = sizes.flatMap((size) => {
-            return colorIds.map((color_id) => {
-                return [product.id, color_id, size, Math.round(Math.random() * 10)];
+        for (let i = 0; i < sheets.length; i++) {
+            const temp = reader.utils.sheet_to_json(file.Sheets[file.SheetNames[i]]);
+            temp.forEach((res) => {
+                data.push(res);
             });
-        });
-        const images = item.other_images.split(',').map((img) => [product.id, img]);
-        console.log(product);
-        console.log(variants);
-        console.log(images);
-        const productId = await Product.createProduct(product, variants, images);
-        if (productId == -1) {
-            console.log(`Failed to insert product ${product.id}`);
-        } else {
-            console.log(`Product ${product.id} inserted with ID ${productId}`);
         }
+
+        for (const item of data) {
+            // Error handle for category
+            if (item.category !== 'men' && item.category !== 'women' && item.category !== 'accessories') {
+                return res.status(400).send('Category must be "men", "women" or "accessories" in product: ' + item.id);
+            }
+
+            // Error handle for price
+            if (!/^\d+$/.test(item.price)) {
+                return res.status(400).send('Price must be an integer in product: ' + item.id);
+            }
+
+            // Use timestamp as product id
+            const now = new Date();
+            let timestamp = now.getTime();
+
+            const product = {
+                id: timestamp,
+                category: item.category,
+                title: item.title,
+                description: item.description,
+                price: item.price,
+                texture: item.texture,
+                wash: item.wash,
+                place: item.place,
+                note: item.note,
+                story: item.story,
+            };
+            product.main_image = item.main_image;
+
+            // Error handle for color
+            const colorIds = item.color_ids.split(',');
+            for (let i = 0; i < colorIds.length; i++) {
+                let colorId = colorIds[i];
+                if (!/^\d+$/.test(colorId)) {
+                    return res.status(400).send('Color id must be an integer in product: ' + item.id);
+                }
+                if (colorId > 14 || colorId < 1) {
+                    return res.status(400).send('Color id should only contain 1-14 in product: ' + item.id);
+                }
+            }
+
+            // Error handle for size
+            const sizes = item.sizes.split(',');
+            const allowedSizes = ['XS', 'S', 'M', 'L', 'XL'];
+            if (!sizes.every((size, index) => allowedSizes.includes(size) && sizes.indexOf(size) === index)) {
+                return res.status(400).send('Sizes should only contain XS, S, M, L, XL in uppercase and should not repeat in product: ' + item.id);
+            }
+
+            const variants = sizes.flatMap((size) => {
+                return colorIds.map((color_id) => {
+                    return [product.id, color_id, size, Math.round(Math.random() * 10)];
+                });
+            });
+            const images = item.other_images.split(',').map((img) => [product.id, img]);
+            console.log(product);
+            console.log(variants);
+            console.log(images);
+            const productId = await Product.createProduct(product, variants, images);
+            if (productId == -1) {
+                console.log(`Failed to insert product ${product.id}`);
+                res.status(500).send(`Failed to insert product ${product.id}: ${product.title}`);
+            } else {
+                console.log(`Product ${product.id} inserted with ID ${productId}`);
+                // res.status(200).send('Product: ' + item.id + ' inserted in to database. ');
+            }
+        }
+        res.status(200).send('All products inserted successfully. ');
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('upload failed: ' + err.message);
     }
 };
 
@@ -174,11 +216,12 @@ const getProductsWithDetail = async (protocol, hostname, products) => {
     const imagesMap = _.groupBy(images, (v) => v.product_id);
 
     return products.map((p) => {
+        // If the image source is an online open-source, there is no need to include the imagePath for it.
         let imagePath;
-        if (p.main_image.startsWith('http')) {
-            imagePath = '';
-        } else {
+        if (p.main_image.startsWith('https')) {
             imagePath = util.getImagePath(protocol, hostname, p.id);
+        } else {
+            imagePath = '';
         }
 
         p.main_image = p.main_image ? imagePath + p.main_image : null;
