@@ -1,32 +1,47 @@
 <!DOCTYPE html>
 <html>
 <head>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Stylish Product Management</title>
-<style>
-body{
-	font-size:16px;
-	font-family:"Noto Sans TC", "微軟正黑體", "新細明體", arial, sans-serif;
-	color:#3f3a3a;line-height:2.5em;
-}
-
-textarea{
-	width:400px;height:100px;padding:5px;
-}
-input{
-	width:300px;padding:5px;
-}
-</style>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Stylish Product Management</title>
+	<link rel="stylesheet" type="text/css" href="./product_excel.css">
 </head>
 <body>
-	<h3>Create a New Product by Excel</h3>
-	<form action="/api/1.0/admin/product_excel" method="post" enctype="multipart/form-data">
-		<label for="excel_file">Select an Excel file:</label>
-		<input type="file" id="excel_file" name="excel_file" accept=".xlsx,.xls">
-		<br><br>
-		<input type="submit" value="Upload">
-	  </form>
+	<div class="container">
+		<h3>Create a New Product by Excel</h3>
+		<form id="product-form" method="post" enctype="multipart/form-data">
+			<label for="excel_file">Select an Excel file:</label>
+			<input type="file" id="excel_file" name="excel_file" accept=".xlsx,.xls">
+			<br><br>
+			<input type="submit" value="upload">
+		</form>
+	</div>
+	<div class="reply" id="message-container"></div>
+
+	<script>
+		document.addEventListener("DOMContentLoaded", function() {
+			document.getElementById("product-form").addEventListener("submit", function(event) {
+				event.preventDefault();
+				const formData = new FormData(document.getElementById("product-form"));
+
+				const xhr = new XMLHttpRequest();
+				xhr.open("POST", "/api/1.0/admin/product_excel");
+				xhr.onreadystatechange = function() {
+					if (this.readyState === XMLHttpRequest.DONE) {
+						document.getElementById("message-container").innerHTML = this.responseText;
+						if (this.status === 200) {
+          					// disable upload buttom
+							document.querySelector("input[type='submit']").setAttribute("disabled", true);
+        				}
+					}
+				};
+				xhr.send(formData);
+			});
+			document.getElementById("excel_file").addEventListener("change", function() {
+  				document.querySelector("input[type='submit']").removeAttribute("disabled");
+			});
+		});
+	</script>
 </body>
 </html>

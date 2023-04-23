@@ -1,0 +1,47 @@
+body {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	height: auto;
+	margin: 0;
+  }
+
+  h3 {
+	text-align: left;
+  }
+
+  .container {
+	margin-top: 100px;
+	padding: 20px 40px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	text-align: center;
+  }
+  
+input[type="submit"] {
+background-color: #D2B48C;
+color: white;
+padding: 10px 20px;
+border: none;
+border-radius: 5px;
+cursor: pointer;
+font-size: 16px;
+}
+
+input[type="submit"]:not([disabled]):hover {
+	background-color: #F4E8C0;
+	color: #9A6852;
+  }  
+
+input[type="submit"][disabled] {
+	cursor: not-allowed;
+	opacity: 0.6;
+	color: #666;
+  }
+
+.reply {
+	margin-top: 20px;
+  }
+  
+  

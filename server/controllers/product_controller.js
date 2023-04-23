@@ -28,9 +28,9 @@ const createProduct = async (req, res) => {
         });
     });
     const images = req.files.other_images.map((img) => [product.id, img.filename]);
-    console.log(product);
-    console.log(variants);
-    console.log(images);
+    // console.log(product);
+    // console.log(variants);
+    // console.log(images);
     const productId = await Product.createProduct(product, variants, images);
     if (productId == -1) {
         res.status(500);
@@ -46,6 +46,7 @@ const createProductExcel = async (req, res) => {
         const file = reader.readFile(filePath);
         const sheets = file.SheetNames;
         let data = [];
+        let errors = [];
 
         for (let i = 0; i < sheets.length; i++) {
             const temp = reader.utils.sheet_to_json(file.Sheets[file.SheetNames[i]]);
@@ -57,12 +58,12 @@ const createProductExcel = async (req, res) => {
         for (const item of data) {
             // Error handle for category
             if (item.category !== 'men' && item.category !== 'women' && item.category !== 'accessories') {
-                return res.status(400).send('Category must be "men", "women" or "accessories" in product: ' + item.id);
+                errors.push(`Category must be "men", "women" or "accessories" in product: ${item.id}`);
             }
 
             // Error handle for price
             if (!/^\d+$/.test(item.price)) {
-                return res.status(400).send('Price must be an integer in product: ' + item.id);
+                errors.push(`Price must be an integer in product: ${item.id}`);
             }
 
             // Use timestamp as product id
@@ -88,18 +89,18 @@ const createProductExcel = async (req, res) => {
             for (let i = 0; i < colorIds.length; i++) {
                 let colorId = colorIds[i];
                 if (!/^\d+$/.test(colorId)) {
-                    return res.status(400).send('Color id must be an integer in product: ' + item.id);
+                    errors.push(`Color id must be an integer in product: ${item.id}`);
                 }
                 if (colorId > 14 || colorId < 1) {
-                    return res.status(400).send('Color id should only contain 1-14 in product: ' + item.id);
+                    errors.push(`Color id should only contain 1-14 in product: ${item.id}`);
                 }
             }
 
             // Error handle for size
-            const sizes = item.sizes.split(',');
-            const allowedSizes = ['XS', 'S', 'M', 'L', 'XL'];
+            const sizes = Array.isArray(item.sizes) ? item.sizes : item.sizes.split(',');
+            const allowedSizes = ['XS', 'S', 'M', 'L', 'XL', 'F'];
             if (!sizes.every((size, index) => allowedSizes.includes(size) && sizes.indexOf(size) === index)) {
-                return res.status(400).send('Sizes should only contain XS, S, M, L, XL in uppercase and should not repeat in product: ' + item.id);
+                errors.push(`Sizes should only contain XS, S, M, L, XL or F in uppercase and should not repeat in product: ${item.id}`);
             }
 
             const variants = sizes.flatMap((size) => {
@@ -108,22 +109,35 @@ const createProductExcel = async (req, res) => {
                 });
             });
             const images = item.other_images.split(',').map((img) => [product.id, img]);
-            console.log(product);
-            console.log(variants);
-            console.log(images);
-            const productId = await Product.createProduct(product, variants, images);
-            if (productId == -1) {
-                console.log(`Failed to insert product ${product.id}`);
-                res.status(500).send(`Failed to insert product ${product.id}: ${product.title}`);
+            // console.log(product);
+            // console.log(variants);
+            // console.log(images);
+
+            let productId;
+            if (errors.length === 0) {
+                productId = await Product.createProduct(product, variants, images);
+            }
+            if (productId === undefined) {
+                console.log(`Failed to insert product ${item.id}`);
             } else {
                 console.log(`Product ${product.id} inserted with ID ${productId}`);
-                // res.status(200).send('Product: ' + item.id + ' inserted in to database. ');
             }
         }
-        res.status(200).send('All products inserted successfully. ');
+        if (errors.length > 0) {
+            console.log(errors);
+            // Return all error messages.
+            const errorMessage = errors.join('<br>\n<div style="text-indent: 000px;">');
+            const errorHtml = `<div style="text-indent: 000px; color: red;">${errorMessage}<br>\
+                                <div style="text-indent: 00px; color: black;">Please revise the mistake above and try it again.</div>`;
+            return res.status(400).send(errorHtml);
+        } else {
+            const successHtml = '<div style="text-align: center; color: green">All products inserted successfully.</div>';
+            return res.status(200).send(successHtml);
+            // res.status(200).send('All products inserted successfully. ');
+        }
     } catch (err) {
         console.error(err);
-        res.status(500).send('upload failed: ' + err.message);
+        return res.status(500).send('Internal Server Error');
     }
 };
 
@@ -202,10 +216,11 @@ const getProductsWithDetail = async (protocol, hostname, products) => {
     return products.map((p) => {
         // If the image source is an online open-source, there is no need to include the imagePath for it.
         let imagePath;
-        if (p.main_image.startsWith('https')) {
-            imagePath = util.getImagePath(protocol, hostname, p.id);
-        } else {
+        console.log(p.main_image);
+        if (p.main_image.startsWith('http')) {
             imagePath = '';
+        } else {
+            imagePath = util.getImagePath(protocol, hostname, p.id);
         }
 
         p.main_image = p.main_image ? imagePath + p.main_image : null;
