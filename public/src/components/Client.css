@@ -1,0 +1,68 @@
+.client {
+    position: relative;
+}
+
+.message-icon {
+position: fixed;
+right: 20px;
+bottom: 20px;
+font-size: 24px;
+background: none;
+border: none;
+cursor: pointer;
+z-index: 1000;
+}
+
+.message-box {
+position: fixed;
+right: 20px;
+bottom: 60px;
+width: 300px;
+background-color: white;
+border: 1px solid #ccc;
+padding: 10px;
+border-radius: 5px;
+display: flex;
+flex-direction: column;
+justify-content: space-between;
+height: 400px;
+box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+z-index: 2;
+}
+
+.client-messages {
+flex-grow: 1;
+overflow-y: auto;
+}
+
+.client-messages ul {
+list-style-type: none;
+padding: 0;
+margin: 0;
+}
+
+.sent,
+.received {
+border-radius: 15px;
+padding: 5px;
+margin: 5px 0;
+display: inline-block;
+}
+
+.sent {
+background-color: #caf8fd;
+float: right;
+clear: both;
+}
+
+.received {
+background-color: #f1f1f1;
+float: left;
+clear: both;
+}
+
+.message-input {
+display: flex;
+align-items: center;
+justify-content: space-between;
+}
